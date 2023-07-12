@@ -133,6 +133,7 @@ such that the cell does not have a x class or a circle class applied to it then 
     align-items: center;
     color: white;
     font-size: 5rem;
+    text-align: center;
 }
 
 .winning-message button{
