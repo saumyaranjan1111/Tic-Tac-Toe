@@ -1,0 +1,155 @@
+*, *::after, *::before {
+    box-sizing: border-box;
+}
+:root{
+    --cell-size:100px;
+    --mark-size:calc(var(--cell-size)*.9);
+}
+body{
+    margin: 0;
+}
+
+.board{
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    justify-content: center;
+
+    /* since the height of the board is 100vh, there is some space left in the vertical direction after the boxes too */
+    /* so align-content needs to be used to distribute the remaining space towards up and down, so that all the nine cells come together at the center of the board */
+    align-content: center;
+
+    /* individual elements should be in the center in their own boxes */
+    justify-items: center;
+    align-items: center;
+    grid-template-columns: repeat(3, auto);
+}
+
+.cell{
+    /* background-color: black; */
+    height: var(--cell-size);
+    width: var(--cell-size);
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.cell:first-child, .cell:nth-child(2), .cell:nth-child(3){
+    border-top:none;
+}
+.cell:last-child, .cell:nth-last-child(2), .cell:nth-last-child(3){
+    border-bottom: none;
+}
+.cell:nth-child(3n+1){
+    border-left:none;
+}
+.cell:nth-child(3n){
+    border-right:none;
+}
+
+/* show the not allowed cursor when a cell already has a cross or a circle inside it
+ */
+.cell.x, .cell.circle{
+    cursor:not-allowed; 
+}
+
+/* .board.x : whenever there is a x class applied to the board(it is x's turn) and we hover over a cell(.cell:hover
+such that the cell does not have a x class or a circle class applied to it then apply these styles) */
+.board.x .cell:not(.x):not(.circle):hover::before,
+.board.x .cell:not(.x):not(.circle):hover::after {
+    content:'';
+    position:absolute;
+    width: calc(var(--mark-size)*.15);
+    height: calc(var(--mark-size));
+    background-color: lightgrey;
+}
+.cell:hover:not(.x):not(.circle)::after{
+    rotate: 45deg;
+}
+.cell:hover:not(.x):not(.circle)::before{
+    rotate: -45deg;
+}
+.cell.x::before, .cell.x::after{
+    content:'';
+    position: absolute;
+    width: calc(var(--mark-size)*.15);
+    height: calc(var(--mark-size));
+    background-color: black;
+}
+
+.cell.x::after{
+    rotate: 45deg;
+}
+.cell.x::before{
+    rotate: -45deg;
+}
+
+.board.circle .cell:not(.x):not(.circle):hover::before,
+.board.circle .cell:not(.x):not(.circle):hover::after{
+    content:'';
+    position:absolute;
+    width: calc(var(--mark-size));
+    height: calc(var(--mark-size));
+    background-color: lightgrey;
+    border-radius: 50%;
+}
+
+.board.circle .cell:not(.x):not(.circle):hover::after{
+    width: calc(var(--mark-size)*0.72);
+    height: calc(var(--mark-size)*0.72);
+    background-color: white;
+}
+.cell.circle::before, .cell.circle::after{
+    content:'';
+    position: absolute;
+    width: calc(var(--mark-size));
+    height: calc(var(--mark-size));
+    background-color: black;
+    border-radius: 50%;
+}
+
+.cell.circle::after{
+    width: calc(var(--mark-size)*0.72);
+    height: calc(var(--mark-size)*0.72);
+    background-color: white;
+}
+
+.winning-message{
+    /* display:none because we dont want it to show up by default */
+    display:none;
+    /* An element with position: fixed; is positioned relative to the viewport, which means it always stays in the same place even if the page is scrolled */
+    /* since we want our winning message to not scroll up if we scroll the page, we need to use position:fixed for this,  */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 5rem;
+}
+
+.winning-message button{
+    font-size: 3rem;
+    background-color: white;
+    border: 1px solid black;
+    padding: .5rem;
+    border-radius: 0.5rem;
+}
+
+.winning-message button:hover{
+    background-color: black;
+    border: 1px solid white;
+    color: white;
+}
+
+.winning-message.show{
+    /* display the winning message only when the class show is attached to the winning message div */
+    display: flex;
+}
